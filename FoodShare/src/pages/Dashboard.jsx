@@ -19,8 +19,6 @@ export default function Dashboard() {
   const [search, setSearch] = useState("");
   const [filterByLocation, setFilterByLocation] = useState("all");
   const [urgencyFilter, setUrgencyFilter] = useState("all");
-
-  // 🔥 REALTIME FETCH (FIXED)
   useEffect(() => {
     const unsub = onSnapshot(collection(db, "foods"), (snapshot) => {
       const data = snapshot.docs.map((doc) => ({
@@ -35,12 +33,12 @@ export default function Dashboard() {
     return () => unsub();
   }, []);
 
-  // 🗑️ DELETE FOOD
+
   const handleDelete = async (id) => {
     await deleteDoc(doc(db, "foods", id));
   };
 
-  // 🍱 CLAIM FOOD
+  
   const handleClaim = async (food) => {
     if (!auth.currentUser) {
       alert("Please login first");
@@ -67,7 +65,6 @@ export default function Dashboard() {
     });
   };
 
-  // 🔍 FILTERING
   const filteredFoods = foods.filter((food) => {
     const q = search.toLowerCase();
 
@@ -84,8 +81,6 @@ export default function Dashboard() {
 
     return matchesSearch && matchesLocation && matchesUrgency;
   });
-
-  // ⏳ LOADING
   if (loading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -102,15 +97,12 @@ export default function Dashboard() {
 
       <div className="max-w-6xl mx-auto px-4 py-6">
 
-        {/* SEARCH */}
         <input
           placeholder="Search food or location..."
           className="border p-2 w-full mb-3 rounded"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-
-        {/* FILTERS */}
         <div className="flex gap-3 mb-4 flex-wrap">
 
           <select
@@ -139,7 +131,6 @@ export default function Dashboard() {
 
         </div>
 
-        {/* EMPTY STATE */}
         {filteredFoods.length === 0 ? (
           <div className="text-center mt-20">
             <div className="text-6xl">🍽️</div>
